@@ -28,8 +28,9 @@ jobs:
         # timeout-minutes: 30
         run: |
           sudo tailscale set --ssh --advertise-exit-node
+          MY_IP=$(tailscale ip -4)
           while true; do
-            if tailscale status --active | grep -q "; offline"; then
+            if tailscale status --active | grep -w "$MY_IP" | grep -q "offline"; then
               echo "Tailscale is showing as offline. Finishing step..."
               break
             fi
